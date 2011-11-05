@@ -1,0 +1,22 @@
+{
+  "author": "Filirom1 <filirom1@gmail.com>",
+  "name": "aur",
+  "description": "Archlinux AUR cli",
+  "version": "0.0.1",
+  "repository": {
+    "url": ""
+  },
+  "engines": {
+    "node": "~0.4.12"
+  },
+  "dependencies": {
+    "request": "2.1.x",
+    "form-data": "0.0.x",
+    "coffee-script": "1.1.x",
+    "underscore": "1.2.x"
+  },
+  "devDependencies": {
+    "vows": "0.5.x",
+    "express": "2.5.x"
+  }
+}
