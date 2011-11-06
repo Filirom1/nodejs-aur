@@ -67,9 +67,13 @@ aur = module.exports =
             return cb null, data
 
   # Try to login and if successful, return the cookie with the SID with the format : AURSID=xxxxxxxxxxxxxx;
-  login: (user, password, cb) ->
+  login: (user, password, options, cb) ->
+    if typeof options is 'function'
+      cb = options
+      options = {}
     cb or= defaultCb
-    url = config.url.base
+    options = _.extend {}, config, options
+    url = options.url.base
 
     # Create the auth data form
     dataForm = querystring.stringify
@@ -86,11 +90,11 @@ aur = module.exports =
       body: dataForm
     , (err, resp) ->
         return cb err if err
-        return cb 'Wrong login or password' if not resp.headers['set-cookie']
+        return cb new Error('Wrong login or password') if not resp.headers['set-cookie']
         setCookie = resp.headers['set-cookie']
         # Extract the SessionID (SID)
         regex = /AURSID=\w*;/
-        return cb 'No SessionID' if not regex.test setCookie
+        return cb new Error('No SessionID') if not regex.test setCookie
         # Return the SID: format = AURSID=xxxxxxxxxxxxxx;
         cb null, regex.exec(setCookie)[0]
 
