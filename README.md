@@ -7,8 +7,8 @@ A CLI to call ArchLinux AUR services.
 
 Usage: ./bin/aur-info packageName
 
-Options:
-  -s, --selector  [default: ""]
+    Options:
+      -s, --selector  [default: ""]
 
 Exemple:
 
@@ -38,11 +38,11 @@ You can also use selectors in your query:
 
 Usage: node ./bin/aur-publish
 
-Options:
-  -f, --file      [required]
-  -c, --category  [required]  [default: "system"]
-  -u, --user      [default: ""]
-  -p, --password  [default: ""]
+    Options:
+      -f, --file      [required]
+      -c, --category  [required]  [default: "system"]
+      -u, --user      [default: ""]
+      -p, --password  [default: ""]
 
 
 Exemple:
