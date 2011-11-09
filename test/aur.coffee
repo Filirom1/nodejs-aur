@@ -1,9 +1,10 @@
 vows    = require 'vows'
 assert  = require 'assert'
 express = require 'express'
-app     = express.createServer()
+form    = require 'connect-form'
 aur     = require '../lib/aur'
 
+app     = express.createServer form keepExtensions: true
 
 module.exports.suite = vows
   .describe('Test nodejs-aur')
@@ -46,6 +47,40 @@ module.exports.suite = vows
         'Then an error is returned': (err, cookie) ->
           assert.isNotNull err
           assert.equal err.message, 'Wrong login or password'
+
+      'When publishing with a good password':
+        topic: ->
+          aur.publish 'user', 'passwd', '/etc/passwd', config, @callback
+          return
+        'Everything is ok': (err, resp) ->
+          assert.isNull err
+          assert.isNotNull resp.fields
+          assert.isNotNull resp.files
+
+      'When publishing a bad file':
+        topic: ->
+          aur.publish 'user', 'passwd', '/etc/group', config, @callback
+          return
+        'Everything is ok': (err, resp) ->
+          assert.isNotNull err
+          assert.equal 'Bad File', err.message
+
+      'When publishing with a bad password':
+        topic: ->
+          aur.publish 'user', 'blabal', '/etc/passwd', config, @callback
+          return
+        'Then an error is returned': (err, resp) ->
+          assert.isNotNull err
+          assert.equal 'Wrong login or password', err.message
+
+      'When publishing a non existing file':
+        topic: ->
+          aur.publish 'user', 'passwd', '/etc/fsqdhjbq', config, @callback
+          return
+        'Then an error is returned': (err, resp) ->
+          assert.isNotNull err
+          assert.equal "ENOENT, No such file or directory '/etc/fsqdhjbq'", err.message
+
   .export module
 
 port = 3000
@@ -53,6 +88,7 @@ config =
   url:
     base: "http://localhost:#{port}/"
     info: 'rpc.php?type=info&arg='
+    post: 'pkgsubmit.php'
 
 dummyPkg =
   Maintainer: 'filirom1'
@@ -84,3 +120,18 @@ app.post '/', (req, res)->
   if req.body.user is 'user' and req.body.passwd is 'passwd'
     res.cookie('AURSID','70bd1ee338d6767283b81e3e50c3610b', {httpOnly: true, secure: true, path: '/'})
   res.send '<html></html>'
+
+# Upload
+app.post "/#{config.url.post}" , (req, res) ->
+  req.form.complete (err, fields, files) ->
+    throw new Error 'Form Exception' if err
+    if files.pfile.name is 'passwd'
+      res.send ''
+    else
+      res.send """
+<html>
+  <body>
+    <div class="pkgoutput">Bad File</div>
+  </body>
+</html>
+"""

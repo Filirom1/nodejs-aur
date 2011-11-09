@@ -4,6 +4,7 @@ FormData    = require 'form-data'
 fs          = require 'fs'
 _           = require 'underscore'
 config      = require './config'
+cheerio     = require "cheerio"
 
 aur = module.exports =
   # Return all the information about the package
@@ -22,9 +23,16 @@ aur = module.exports =
       cb null, json.results
 
   # Publish a package
-  publish: (user, password, filePkg, category, cb) ->
+  publish: (user, password, filePkg, category, options, cb) ->
+    if typeof options is 'function'
+      cb = options
+      options = {}
     cb or= defaultCb
+    if typeof category is 'object'
+      options = category
+      category = null
     category or= 'system'
+    options = _.extend {}, config, options
 
     # The list of all available categories
     categories =
@@ -48,7 +56,7 @@ aur = module.exports =
       kernels:19
     categoryId = categories[category]
 
-    @login user, password, (err, cookie) ->
+    @login user, password, options, (err, cookie) ->
       return cb err if err
       form = new FormData()
       form.append 'pkgsubmit', '1'
@@ -61,9 +69,11 @@ aur = module.exports =
           headers: form.getHeaders
             'Cookie': cookie,
             'Content-Length': length
-          url: 'http://localhost:3000/test/upload'
+          url: options.url.base + options.url.post
           , (err, resp, data) ->
             return cb err if err
+            $ = cheerio.load data
+            return cb new Error $(".pkgoutput").text() if $('.pkgoutput').text()
             return cb null, data
 
   # Try to login and if successful, return the cookie with the SID with the format : AURSID=xxxxxxxxxxxxxx;

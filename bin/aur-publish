@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+
+require ('coffee-script');
+var aur = require('../lib/aur');
+
+var argv = require('optimist')
+    .usage('Usage: $0 ')
+    .demand(['f' , 'c'])
+    .alias('user', 'u')
+    .alias('password', 'p')
+    .alias('file', 'f')
+    .alias('category', 'c')
+    .default('u', '')
+    .default('p', '')
+    .default('c', 'system')
+    .argv;
+
+var name = argv._;
+
+aur.publish(argv.user, argv.password, argv.file, argv.category, function(err, data){
+  if(err){
+    console.error(err.message || err);
+    process.exit(-1);
+  }
+  console.log(data);
+});

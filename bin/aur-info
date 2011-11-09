@@ -1,0 +1,30 @@
+#!/usr/bin/env node
+
+require ('coffee-script');
+var aur = require('../lib/aur');
+
+var argv = require('optimist')
+    .usage('Usage: $0 packageName ')
+    .demand('_')
+    .alias('selector', 's')
+    .default('s', '')
+    .argv;
+
+var name = argv._;
+
+aur.info(name, function(err, data){
+  if(err){
+    console.error(err.message || err);
+    process.exit(-1);
+  }
+  if(!argv.selector) {
+    return console.log(data);
+  }
+  if(data[argv.selector] === undefined) {
+    console.error('Selector is not valid');
+    console.log('Valid selectors are : \n * ' + Object.keys(data).join('\n * '));
+    process.exit(-1);
+  }
+  console.log(data[argv.selector]);
+});
+
