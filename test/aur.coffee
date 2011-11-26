@@ -13,8 +13,8 @@ module.exports.suite = vows
       topic: ->
         app.listen port, @callback
         return
-      teardown: ()->
-         app.close()
+      teardown: ->
+        app.close()
 
       'When searching npm2arch':
         topic: ->
@@ -79,7 +79,7 @@ module.exports.suite = vows
           return
         'Then an error is returned': (err, resp) ->
           assert.isNotNull err
-          assert.equal "ENOENT, No such file or directory '/etc/fsqdhjbq'", err.message
+          assert.equal "ENOENT, no such file or directory '/etc/fsqdhjbq'", err.message
 
   .export module
 

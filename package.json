@@ -2,7 +2,7 @@
   "author": "Filirom1 <filirom1@gmail.com>",
   "name": "aur",
   "description": "Archlinux AUR cli",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "homepage": "https://github.com/Filirom1/nodejs-aur",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "node": "~0.6.0"
   },
   "dependencies": {
-    "request": "2.1.x",
+    "request": "2.2.x",
     "form-data": "https://github.com/Filirom1/node-form-data/tarball/master",
     "coffee-script": "1.1.x",
     "underscore": "1.2.x",
@@ -30,8 +30,11 @@
     "cheerio": "0.2.x"
   },
   "devDependencies": {
-    "vows": "0.5.x",
+    "vows": "0.6.x",
     "express": "2.5.x",
     "connect-form": "0.2.x"
+  },
+    "scripts": {
+    "test": "vows test/* --spec"
   }
 }

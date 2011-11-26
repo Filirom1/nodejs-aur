@@ -6,6 +6,8 @@ _           = require 'underscore'
 config      = require './config'
 cheerio     = require "cheerio"
 
+request = request.defaults proxy: process.env['https_proxy']
+
 aur = module.exports =
   # Return all the information about the package
   # only name is mandatory
@@ -16,7 +18,7 @@ aur = module.exports =
     cb or= defaultCb
     options = _.extend {}, config, options
     url = options.url.base + options.url.info + name
-    request url, (err, resp, body) ->
+    request url:url, (err, resp, body) ->
       return cb err if err
       json = JSON.parse body
       return cb new Error(json.results) if json.type is 'error'
