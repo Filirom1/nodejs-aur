@@ -6,7 +6,7 @@ _           = require 'underscore'
 config      = require './config'
 cheerio     = require "cheerio"
 
-request = request.defaults proxy: process.env['https_proxy']
+request = request.defaults proxy: process.env['https_proxy'], jar: false
 
 aur = module.exports =
   # Return all the information about the package

@@ -22,5 +22,5 @@ aur.publish(argv.user, argv.password, argv.file, argv.category, function(err, da
     console.error(err.message || err);
     process.exit(-1);
   }
-  console.log(data);
+  console.log('Update successfull');
 });

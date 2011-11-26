@@ -2,7 +2,7 @@
   "author": "Filirom1 <filirom1@gmail.com>",
   "name": "aur",
   "description": "Archlinux AUR cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/Filirom1/nodejs-aur",
   "repository": {
     "type": "git",
