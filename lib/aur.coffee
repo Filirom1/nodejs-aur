@@ -62,6 +62,7 @@ aur = module.exports =
       return cb err if err
       form = new FormData()
       form.append 'pkgsubmit', '1'
+      form.append 'token', cookie.replace('AURSID=', '')
       form.append 'category', categoryId + ''
       form.append 'pfile', fs.createReadStream(filePkg)
       form.getLength (err, length) ->
@@ -69,7 +70,7 @@ aur = module.exports =
         form.pipe request
           method: 'POST',
           headers: form.getHeaders
-            'Cookie': cookie,
+            'Cookie': cookie
             'Content-Length': length
           url: options.url.base + options.url.post
           , (err, resp, data) ->
@@ -105,10 +106,11 @@ aur = module.exports =
         return cb new Error('Wrong login or password') if not resp.headers['set-cookie']
         setCookie = resp.headers['set-cookie']
         # Extract the SessionID (SID)
-        regex = /AURSID=\w*;/
+        regex = /AURSID=\w*/
         return cb new Error('No SessionID') if not regex.test setCookie
-        # Return the SID: format = AURSID=xxxxxxxxxxxxxx;
-        cb null, regex.exec(setCookie)[0]
+        # Return the SID: format = AURSID=xxxxxxxxxxxxxx
+        sid=regex.exec(setCookie)[0];
+        cb null, sid
 
 
 defaultCb = (err, results) ->

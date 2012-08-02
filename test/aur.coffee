@@ -1,10 +1,10 @@
 vows    = require 'vows'
 assert  = require 'assert'
 express = require 'express'
-form    = require 'connect-form'
 aur     = require '../lib/aur'
 
-app     = express.createServer form keepExtensions: true
+app     = express.createServer()
+app.use express.bodyParser()
 
 module.exports.suite = vows
   .describe('Test nodejs-aur')
@@ -54,8 +54,6 @@ module.exports.suite = vows
           return
         'Everything is ok': (err, resp) ->
           assert.isNull err
-          assert.isNotNull resp.fields
-          assert.isNotNull resp.files
 
       'When publishing a bad file':
         topic: ->
@@ -79,7 +77,7 @@ module.exports.suite = vows
           return
         'Then an error is returned': (err, resp) ->
           assert.isNotNull err
-          assert.equal "ENOENT, no such file or directory '/etc/fsqdhjbq'", err.message
+          assert.include err.message, "ENOENT"
 
   .export module
 
@@ -123,12 +121,10 @@ app.post '/', (req, res)->
 
 # Upload
 app.post "/#{config.url.post}" , (req, res) ->
-  req.form.complete (err, fields, files) ->
-    throw new Error 'Form Exception' if err
-    if files.pfile.name is 'passwd'
-      res.send ''
-    else
-      res.send """
+  if req.files.pfile.name is 'passwd'
+    res.send ''
+  else
+    res.send """
 <html>
   <body>
     <div class="pkgoutput">Bad File</div>
