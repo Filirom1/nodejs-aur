@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/Filirom1/nodejs-aur.png)](http://travis-ci.org/Filirom1/nodejs-aur)
 ArchLinux AUR helper
 ====================
 
