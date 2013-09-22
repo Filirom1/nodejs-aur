@@ -1,7 +1,8 @@
 vows    = require 'vows'
 assert  = require 'assert'
 express = require 'express'
-aur     = require '../lib/aur'
+aur     = require '../src/aur'
+fs      = require "fs"
 
 app     = express.createServer()
 app.use express.bodyParser()
@@ -107,7 +108,7 @@ dummyPkg =
 app.use express.bodyParser()
 
 # Search
-app.get '/rpc.php', (req, res)->
+app.get "/rpc.php", (req, res)->
   throw new Error 'arg not specified' if not req.query.arg
   if req.query.arg is 'nodejs-npm2arch'
     res.json type: 'info', results: dummyPkg
@@ -115,7 +116,7 @@ app.get '/rpc.php', (req, res)->
     res.json type: 'error', results: 'No results found'
 
 # Login
-app.post '/#{config.url.login}/', (req, res)->
+app.post "/#{config.url.login}", (req, res)->
   if req.body.user is 'user' and req.body.passwd is 'passwd'
     res.cookie('AURSID','70bd1ee338d6767283b81e3e50c3610b', {httpOnly: true, secure: true, path: '/'})
   res.send '<html></html>'
