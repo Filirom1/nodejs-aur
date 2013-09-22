@@ -34,7 +34,7 @@
     "express": "2.5.x"
   },
   "scripts": {
-    "install": "coffee -o lib -m -c src",
+    "install": "coffee -o lib -c src",
     "test": "./node_modules/.bin/vows test/* --spec"
   }
 }
