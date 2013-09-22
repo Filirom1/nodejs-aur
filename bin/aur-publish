@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-require ('coffee-script');
 var aur = require('../lib/aur');
 
 var argv = require('optimist')
