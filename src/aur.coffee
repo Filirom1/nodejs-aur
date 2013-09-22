@@ -72,7 +72,7 @@ aur = module.exports =
           headers: form.getHeaders
             'Cookie': cookie
             'Content-Length': length
-          url: options.url.base + options.url.post
+          url: options.url.base + (options.url.post || '')
           , (err, resp, data) ->
             return cb err if err
             $ = cheerio.load data
@@ -86,7 +86,7 @@ aur = module.exports =
       options = {}
     cb or= defaultCb
     options = _.extend {}, config, options
-    url = options.url.base
+    url = options.url.base + (options.url.login || '')
 
     # Create the auth data form
     dataForm = querystring.stringify
