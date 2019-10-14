@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "vows": "0.6.x",
-    "express": "2.5.x"
+    "express": "4.17.x"
   },
   "scripts": {
     "test": "./node_modules/.bin/vows test/* --spec"
